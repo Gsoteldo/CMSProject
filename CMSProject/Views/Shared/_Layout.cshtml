@@ -1,0 +1,137 @@
+﻿@using CMSProject.Data
+@using Microsoft.AspNetCore.Identity
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CMSProject</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/CMSProject.styles.css" asp-append-version="true" />
+    <style>
+
+        .nav-item {
+            display: inline;
+            margin-right: 10px;
+        }
+
+            .nav-item a {
+                text-decoration: none;
+                color: black;
+            }
+
+                .nav-item a:hover {
+                    text-decoration: underline;
+                }
+
+        .active a {
+            font-weight: bold;
+            color: black; /* O cualquier otro estilo que prefieras para resaltar la página actual */
+        }
+    </style>
+
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CMSProject</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        @{
+                            // <li class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Admin" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")">
+                            //     <a asp-controller="Admin" asp-action="Index">Home</a>
+                            // </li>
+
+                            if (User.Identity.IsAuthenticated)
+                            {
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <li class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Admin" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index">Dashboard</a>
+                                    </li>
+
+                                    <li class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Admin" && ViewContext.RouteData.Values["action"]?.ToString() == "UserManagement" ? "active" : "")">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="UserManagement">Usuarios</a>
+                                    </li>
+
+                                    @* <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Roles">Roles</a>
+                        </li> *@
+                                }
+                                @if (User.IsInRole("Cliente"))
+                                {
+                                    <li class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Client" && ViewContext.RouteData.Values["action"]?.ToString() == "ClientDashboard" ? "active" : "")">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Client" asp-action="ClientDashboard">Dashboard</a>
+                                    </li>
+
+                                    <li class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Client" && ViewContext.RouteData.Values["action"]?.ToString() == "LastModification" ? "active" : "")">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Client" asp-action="LastModification">Ult. Modificaciones</a>
+                                    </li>
+                                }
+                                @if (User.IsInRole("Creador"))
+                                {
+                                    <li class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Creator" && ViewContext.RouteData.Values["action"]?.ToString() == "CreatorDashboard" ? "active" : "")">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Creator" asp-action="CreatorDashboard">Dashboard</a>
+                                    </li>
+                                }
+                                @if (User.IsInRole("Publicista"))
+                                {
+                                    <li class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Publisher" && ViewContext.RouteData.Values["action"]?.ToString() == "PublisherDashboard" ? "active" : "")">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Publisher" asp-action="PublisherDashboard">Dashboard</a>
+                                    </li>
+
+                                    <li class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Publisher" && ViewContext.RouteData.Values["action"]?.ToString() == "PostDashboard" ? "active" : "")">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Publisher" asp-action="PostDashboard">Posts</a>
+                                    </li>
+                                }
+
+                                <li class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "File" && ViewContext.RouteData.Values["action"]?.ToString() == "FileIndex" ? "active" : "")">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="File" asp-action="FileIndex">Archivos</a>
+                                </li>
+
+                                <li class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Users" && ViewContext.RouteData.Values["action"]?.ToString() == "LogOut" ? "active" : "")">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="LogOut">Salir</a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Login</a>
+                                </li>
+                            }
+
+                        }
+                    </ul>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            @Html.Raw(BreadcrumbHelper.GenerateBreadcrumbs(ViewContext))
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2024 - CMSProject - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

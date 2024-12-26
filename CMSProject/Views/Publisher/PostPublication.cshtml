@@ -1,0 +1,52 @@
+﻿@model CMSProject.Models.CmsViewModel
+
+@{
+    ViewData["Title"] = "PostPublication";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<head>
+    <script src="https://cdn.tiny.cloud/1/x6omwmg280c6umicdb1iydhoxljwxesn20gc7qin1z9gvvfc/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="~/js/tinymce.js"></script>
+</head>
+
+
+
+<h1>Confirmar Publicación</h1>
+
+<h4>PublicationTable</h4>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="PostPublicationConfirmed">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Publication.Id" />
+            <input type="hidden" asp-for="Publication.IdUser" />
+            <div class="form-group">
+                <label asp-for="Publication.Title" class="control-label"></label>
+                <input asp-for="Publication.Title" class="form-control" />
+                <span asp-validation-for="Publication.Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Publication.Concept" class="control-label"></label>
+                <input id="descripcionArea" asp-for="Publication.Concept" />
+                <span asp-validation-for="Publication.Concept" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Publication.PublicationDate" class="control-label"></label>
+                <input asp-for="Publication.PublicationDate" class="form-control" />
+                <span asp-validation-for="Publication.PublicationDate" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

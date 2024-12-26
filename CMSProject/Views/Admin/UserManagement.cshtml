@@ -1,0 +1,337 @@
+﻿@model CMSProject.Models.CmsViewModel
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment hostingEnv
+
+
+@{
+    ViewData["Title"] = "UserManagement";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Gestion de Usuarios</h1>
+
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link href="~/css/card.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+
+
+@* <!-- Crear Usuario--> *@
+<div class="modal fade" id="UserCreation" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="saveForm" method="post" asp-action="CreateUser" enctype="multipart/form-data">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Crear publicación</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label asp-for="User!.Name" class="control-label"></label>
+                        <input asp-for="User!.Name" class="form-control" />
+                        <span asp-validation-for="User!.Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="User!.Email" class="control-label"></label>
+                        <input asp-for="User!.Email" class="form-control" />
+                        <span asp-validation-for="User!.Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="User!.Password" class="control-label"></label>
+                        <input asp-for="User!.Password" class="form-control" />
+                        <span asp-validation-for="User!.Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="User!.IdRole" class="control-label"></label>
+                        <select asp-for="User!.IdRole" class="form-control" asp-items="@ViewBag.IdRole">
+                            <option selected="selected" value="">Seleccionar Rol</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="User!.IdClient" class="control-label"></label>
+                        <select asp-for="User!.IdClient" class="form-control" asp-items="@ViewBag.IdClient">
+                            <option selected="selected" value="">Seleccionar Cliente</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="User!.Imagen" class="control-label"></label>
+                        <input type="file" asp-for="User!.Imagen" class="form-control" />
+                        <span asp-validation-for="User!.Imagen" class="text-danger"></span>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btnCancel" data-dismiss="modal">Cerrar</button>
+                        <button id="btnSave" type="submit" class="btn btn-primary">Crear Tarea</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@* <!-- Editar Publicacion --> *@
+<div class="modal fade" id="EditUsers" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="EditForm" asp-action="EditUser" method="post" enctype="multipart/form-data">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Editar Tarea</h5>
+                    <button type="button" class="close btnCancel" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <input class="updateId" type="hidden" asp-for="User!.Id" />
+
+                    <div class="form-group">
+                        <label asp-for="User!.Name" class="control-label"></label>
+                        <input id="nameUser" asp-for="User!.Name" class="form-control" />
+                        <span asp-validation-for="User!.Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="User!.Email" class="control-label"></label>
+                        <input id="emailUser" asp-for="User!.Email" class="form-control" />
+                        <span asp-validation-for="User!.Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="User!.Password" class="control-label"></label>
+                        <input asp-for="User!.Password" class="form-control" />
+                        <span asp-validation-for="User!.Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="User!.IdRole" class="control-label"></label>
+                        <select id="roleUser" asp-for="User!.IdRole" class="form-control" asp-items="@ViewBag.IdRole">
+                            <option selected="selected" value="">Seleccionar Rol</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="User!.IdClient" class="control-label"></label>
+                        <select id="companyUser" asp-for="User!.IdClient" class="form-control" asp-items="@ViewBag.IdClient">
+                            <option selected="selected" value="">Seleccionar Cliente</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="User!.Imagen" class="control-label"></label>
+                        <input type="file" asp-for="User!.Imagen" class="form-control" />
+                        <span asp-validation-for="User!.Imagen" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btnCancel" data-dismiss="modal">Cerrar</button>
+                    <button id="btnSave" type="submit" class="btn btn-primary">Guardar cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@* <!-- Borrar Usuario--> *@
+<div class="modal fade" id="DeleteUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="saveForm" method="post">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Borrar Tarea</h5>
+                    <button type="button" class="close btnCancel" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <h2>¿Estas seguro de que quieres borrar este usuario?</h2>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btnCancel" data-dismiss="modal">Cerrar</button>
+                    <button id="btnDelete" type="button" class="btn btn-danger">Borrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<button type="button" class="btn btn-primary" data-animation="zoom-in" data-toggle="modal" data-target="#UserCreation">
+    Crear nuevo usuario
+</button>
+
+@* Filtros de busqueda *@
+<form asp-controller="Admin" asp-action="UserManagement">
+    <div class="row justify-content-center mt-3 mb-3">
+        <div class="col-11 text-center p-3 bg-secondary border border-dark rounded">
+
+            <div class=" justify-content-center">
+                <div class="col-12 text-center">
+                    <input class="rounded" type="text" name="SearchString" placeholder="Nombre del usuario" />
+                </div>
+            </div>
+
+            <div class="row mt-3 mb-3 justify-content-center">
+                <div class="col-12 text-center">
+                    <select class="rounded" asp-for="User!.IdClient" name="name" asp-items="@ViewBag.IdClient">
+                        <option selected="selected" value="">Seleccionar Cliente</option>
+                    </select>
+                </div>
+            </div>
+
+            <input class="rounded" type="submit" value="Filtro" />
+        </div>
+    </div>
+</form>
+
+
+<input type="hidden" id="UsersId">
+
+<div class="container mt-5">
+    <div class="row">
+
+        @foreach (var item in Model.Users!)
+        {
+            if (item.IsActivated == true)
+            {
+
+                <div class="col-md-4 d-flex align-items-stretch">
+                    <div class="card mb-4">
+
+                        @*Agregar imagen a usuario*@
+                        @{
+                            String imagePath = System.IO.Path.Combine(hostingEnv.WebRootPath, "userImages", item.Email.Trim() + ".jpg");
+                            if (System.IO.File.Exists(imagePath))
+                            {
+                                <img class="card-img-top" src="@("/userImages/" + item.Email.Trim() + ".jpg")" imagePath alt="Card image cap" style="width:100%">
+                            }
+                            else
+                            {
+                                <img class="card-img-top" src="https://www.w3schools.com/howto/img_avatar.png" alt="Card image cap" style="width:100%">
+                            }
+                        }
+
+                        <div class="card-body">
+                            <h4 class="card-title"> @item.Name</h4>
+                            <div class="card-text-container">
+                                <div>
+                                    Correo: @item.Email
+                                </div>
+                                @if (item.IdClientNavigation != null)
+                                {
+                                    <div>
+                                        Empresa: @item.IdClientNavigation.Name
+                                    </div>
+                                }
+                                <div>
+                                    Rol: @Html.DisplayFor(modelItem => item.IdRoleNavigation!.Role)
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="card-footer text-muted">
+                            <button type="button" onclick="EditUs(@item.Id)" class="btn btn-primary" data-toggle="modal">
+                                Editar
+                            </button>
+
+                            <button type="button" onclick="Confirm(@item.Id)" class="float-md-start btn btn-danger" data-toggle="modal">
+                                Borrar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<br />
+<br />
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script src="~/js/UsersModal.js"></script>
+}
+
+
+@*
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.User!.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User!.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User!.Password)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User!.IdRoleNavigation!.Role)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User!.IdClient)
+            </th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Users!)
+        {
+            if (item.IsActivated == true)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Password)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IdRoleNavigation!.Role)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IdClientNavigation!.Name)
+                    </td>
+                    <td>
+                        <button type="button" onclick="EditUs(@item.Id)" class="btn btn-primary" data-toggle="modal">
+                            Editar
+                        </button>
+                    </td>
+                    <td>
+                        <button type="button" onclick="Confirm(@item.Id)" class="float-md-start btn btn-danger" data-toggle="modal">
+                            Borrar
+                        </button>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+ *@

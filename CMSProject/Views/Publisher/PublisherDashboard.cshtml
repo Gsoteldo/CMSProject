@@ -1,0 +1,224 @@
+﻿@model CMSProject.Models.CmsViewModel
+
+@{
+    ViewData["Title"] = "PublisherDashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Dashboard</h1>
+
+
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link href="~/css/card.css" rel="stylesheet" />
+
+</head>
+
+@* Filtros de busqueda *@
+<form asp-controller="Publisher" asp-action="PublisherDashboard">
+    <div class="row justify-content-center mt-3 mb-3">
+        <div class="col-11 text-center p-3 bg-secondary border border-dark rounded">
+            <div class=" justify-content-center">
+                <div class="col-12 text-center">
+                    <input class="rounded" type="text" name="SearchString" placeholder="Palabra Clave" />
+                </div>
+            </div>
+
+            <div class="row mt-3 mb-3 justify-content-center">
+                <div class="col-12 text-center">
+                    <select class="rounded" asp-for="User.Name" name="name" asp-items="@ViewBag.Creator">
+                        <option selected="selected" value="0">Seleccionar Cliente</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row mt-3 mb-3 justify-content-center ">
+                <div class="col-12 text-center">
+                    <input class="rounded" type="date" name="Date">
+                </div>
+            </div>
+
+            <input class="rounded" type="submit" value="Filtro" />
+        </div>
+    </div>
+</form>
+
+
+@* <!-- Modal para Publicar--> *@
+<div class="modal fade" id="postPublication" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="saveForm" method="post">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Borrar Tarea</h5>
+                    <button type="button" class="close btnCancel" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+
+
+                    <h2>¿Estas seguro de que quieres Publicar?</h2>
+                    @* <label asp-for="File!.Id" class="control-label"></label>
+                    <select id="dropDownFile" asp-for="File!.Id" class="form-control" asp-items="@ViewBag.Files">
+                        <option selected="selected" value="-1">Seleccionar Archivo</option>
+                    </select> *@
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btnCancel" data-dismiss="modal">Cerrar</button>
+                    <button id="btnPost" type="submit" class="btn btn-primary">Publicar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@* Modal de Leer mas *@
+<div class="modal fade" id="ReadMoreModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Leer Mas</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div id="ReadMoreModal1" class="modal-body">
+                <h4>PublicationTable</h4>
+                <hr />
+
+            </div>
+            <div class="modal-footer">
+                <a asp-action="CreatorDashboard">Back to List</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<input type="hidden" id="PostId">
+<div class="container mt-5">
+    <div class="row">
+
+        @foreach (var item in Model.Publications!)
+        {
+            <div class="col-md-4 d-flex align-items-stretch">
+                <div class="card mb-4">
+
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Title</h5>
+                        <div class="card-text-container">@Html.Raw(item.Concept)</div>
+                        @item.PublicationDate.ToString()
+                    </div>
+
+                    <div class="card-footer text-muted">
+                        <button type="button" class="btn btn-primary btn-read-more" onclick="ReadMore(@item.Id)" data-toggle="modal">
+                            Leer Mas
+                        </button>
+
+                        <button type="button" onclick="Confirm(@item.Id)" class="btn btn-primary" data-toggle="modal">
+                            Publicar
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+
+        }
+    </div>
+</div>
+
+<br />
+<br />
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/js/publisher.js"></script>
+}
+
+@* 
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Publication!.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Publication!.Concept)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Publication!.PublicationDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Publication!.IdUser)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+        <div class="container mt-5">
+            <div class="row">
+
+                @foreach (var item in Model.Publications!)
+                {
+
+
+            <tr>
+                <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                            @Html.DisplayFor(modelItem => item.Concept)
+                </td>
+                <td>
+                            @Html.DisplayFor(modelItem => item.PublicationDate)
+                </td>
+                <td>
+                            @Html.DisplayFor(modelItem => item.IdUserNavigation!.Name)
+                </td>
+                <td>
+                            @{
+                                if (item.IsPost == true)
+                                {
+                            <button type="button" class="btn btn-secondary" disabled>
+                                Publicado
+                            </button>
+                                }
+                                else
+                                {
+                                    // <a type="button" class="btn btn-primary" asp-action="PostPublication" asp-route-id="@item.Id">
+                                    //     Publicar
+                                    // </a>
+
+
+                            <button type="button" onclick="Confirm(@item.Id)" class="btn btn-primary" data-toggle="modal">
+                                Publicar
+                            </button>
+                                }
+                            }
+                </td>
+
+            </tr>
+                }
+        }
+
+
+        </div>
+        </div>
+    </tbody>
+</table> *@

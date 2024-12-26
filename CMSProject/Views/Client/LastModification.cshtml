@@ -1,0 +1,88 @@
+﻿@model CMSProject.Models.CmsViewModel
+
+@{
+    ViewData["Title"] = "LastModification";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Ultimas Modificaciones</h1>
+
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+</head>
+
+
+<form asp-controller="Client" asp-action="LastModification">
+    <div class="row justify-content-center mt-3 mb-3">
+        <div class="col-11 text-center p-3 bg-secondary border border-dark rounded">
+            <div class=" justify-content-center">
+                <div class="col-12 text-center">
+                    <input class="rounded" type="text" name="SearchString" placeholder="Palabra Clave" />
+                </div>
+            </div>
+
+            <div class="row mt-3 mb-3 justify-content-center">
+                <div class="col-12 text-center">
+                    <select class="rounded" asp-for="User.Name" name="name" asp-items="@ViewBag.Creator">
+                        <option selected="selected" value="">Seleccionar Cliente</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row mt-3 mb-3 justify-content-center ">
+                <div class="col-12 text-center">
+                    <input class="rounded" type="date" name="Date">
+                </div>
+            </div>
+
+            <input class="rounded" type="submit" value="Filtro" />
+        </div>
+    </div>
+</form>
+
+
+
+
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.LastModification!.LastModification)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastModification!.Publication)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastModification!.IdCreator)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastModification!.Modification)
+            </th>
+@*             <th></th> *@
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.LastModifications!)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastModification)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Publication)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdCreatorNavigation.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Modification)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<br />

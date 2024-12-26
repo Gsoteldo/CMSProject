@@ -1,0 +1,116 @@
+﻿@model CMSProject.Models.CmsViewModel
+
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Dashboard</h1>
+
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="~/js/adminmodal.js"></script>
+</head>
+
+@* Filtro de busqueda *@
+<form asp-controller="Admin" asp-action="Index">
+    <div class="row justify-content-center mt-3 mb-3">
+        <div class="col-11 text-center p-3 bg-secondary border border-dark rounded">
+            <div class=" justify-content-center">
+                <div class="col-12 text-center">
+                    <input class="rounded" type="text" name="SearchString" placeholder="Palabra Clave" />
+                </div>
+            </div>
+
+            <div class="row mt-3 mb-3 justify-content-center">
+                <div class="col-12 text-center">
+                    <select class="rounded" asp-for="User!.Name" name="name" asp-items="@ViewBag.Creator">
+                        <option selected="selected" value="">Seleccionar Cliente</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row mt-3 mb-3 justify-content-center ">
+                <div class="col-12 text-center">
+                    <input class="rounded" type="date" name="Date">
+                </div>
+            </div>
+
+
+            <input class="rounded" type="submit" value="Filtro" />
+        </div>
+    </div>
+</form>
+
+<div class="modal fade" id="AdminModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="AdminModal1" class="modal-body">
+                <h4>PublicationTable</h4>
+                <hr />
+
+            </div>
+            <div class="modal-footer">
+                <a asp-action="CreatorDashboard">Back to List</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Publication!.Title)
+            </th>
+            @* <th>
+            @Html.DisplayNameFor(model => model.Publication!.Concept)
+            </th> *@
+            <th>
+                @Html.DisplayNameFor(model => model.Publication!.PublicationDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Publication!.IdUser)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Publications!)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                @* <td>
+            @Html.DisplayFor(modelItem => item.Concept)
+            </td> *@
+                <td>
+                    @Html.DisplayFor(modelItem => item.PublicationDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdUserNavigation!.Name)
+                </td>
+                <td>
+                    <button type="button" class="btn btn-primary btn-read-more" onclick="ReadMore(@item.Id)" data-toggle="modal">
+                        Detalles
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<br />
+<br />

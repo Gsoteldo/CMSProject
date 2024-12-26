@@ -1,0 +1,45 @@
+Data Source=ESDESLSPDES;Initial Catalog=TaskManagement;User ID=gsoteldor;Trust Server Certificate=True
+
+dotnet ef dbcontext scaffold "Data Source=ESDESLSPDES;Initial Catalog=TaskManagement;User ID=gsoteldor;Password=22052000Ga;Trust Server Certificate=True" Microsoft.EntityFrameworkCore.SqlServer -o Models
+
+prerequisitos:
+dotnet tool install --global dotnet-ef --version 8.*
+dotnet tool install --global dotnet-ef --version 8.0.*
+
+Para utilizar los comandos CLI de Entity Framework Core y realizar la ingeniería inversa de una base de datos en un proyecto MVC .NET Core, puedes seguir estos pasos:
+Instalar EF Core CLI: Primero, asegúrate de tener instalado el CLI de Entity Framework Core. Puedes instalarlo con el siguiente comando:
+dotnet tool install --global dotnet-ef
+Conectar a la Base de Datos: Necesitarás la cadena de conexión de tu base de datos. Asegúrate de tenerla a mano para los siguientes pasos.
+Scaffolding del Modelo: Utiliza el comando dotnet ef dbcontext scaffold para generar el modelo de datos. Reemplaza <CONNECTION_STRING> con tu cadena de conexión y <PROVIDER> con el proveedor de base de datos que estás utilizando (por ejemplo, Microsoft.EntityFrameworkCore.SqlServer para SQL Server):
+Este comando creará un contexto de base de datos y clases de modelo en la carpeta Models basadas en tu esquema de base de datos.
+dotnet ef dbcontext scaffold "<CONNECTION_STRING>" <PROVIDER> -o Models
+Migraciones: Si necesitas realizar cambios en el modelo y aplicarlos a la base de datos, puedes usar los siguientes comandos para crear y aplicar migraciones:
+El primer comando crea una nueva migración llamada InitialCreate y el segundo aplica la migración a la base de datos.
+dotnet ef migrations add InitialCreate
+dotnet ef database update
+Ejecutar la Aplicación: Una vez que hayas generado el modelo y aplicado las migraciones necesarias, puedes ejecutar tu aplicación para probar las operaciones CRUD.
+Recuerda que estos comandos se deben ejecutar en la terminal y en el directorio de tu proyecto donde se encuentra el archivo .csproj. Si tienes alguna duda o necesitas más detalles, estoy aquí para ayudarte.
+
+
+using System.Collections.Generic;
+
+namespace TaskManagement.Models;
+
+public partial class TablaTarea
+{
+    public int IDTarea { get; set; }
+
+    public string? TituloTarea { get; set; }
+
+    public string? DescripcionTarea { get; set; }
+
+    public DateOnly? FechaDeInicio { get; set; }
+
+    public DateOnly? FechaDeExpiracion { get; set; }
+
+    public string? Completado { get; set; }
+
+    public string? Nombre { get; set; }
+
+    public string? Apellido { get; set; }
+}

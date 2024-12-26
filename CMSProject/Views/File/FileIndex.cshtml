@@ -1,0 +1,114 @@
+﻿@using CMSProject.Models
+@model List<FileTable>
+
+@{
+    ViewData["Title"] = "Archivos";
+}
+
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+
+<h1>Archivos</h1>
+
+@*Modal de la descarga de archivos*@
+<div class="modal fade" id="DownloadModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="exampleModalLabel">Descargar archivos</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <table>
+                <tr>
+                    <th>Nombre del Archivo</th>
+                    <th></th>
+                </tr>
+                @if (Model != null)
+                {
+                    foreach (var archivo in Model)
+                    {
+                        if (archivo != null && archivo.FileName != null)
+                        {
+                            <tr>
+                                <td>@archivo.FileName</td>
+                                <td>@Html.ActionLink("Descargar", "DownloadFile", new { file = archivo.FileName })</td>
+                            </tr>
+                        }
+                    }
+                }
+            </table>
+            <br />
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<div class="modal" id="errorModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Error</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="errorMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger btnCancel" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*Pestaña de Descarga*@
+<div class="col-6">
+    <form method="post" enctype="multipart/form-data" asp-controller="File" asp-action="FileIndex">
+        <div class="mb-3">
+            <input id="fileInput" type="file" name="file" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary">Subir archivo</button>
+
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <script>
+                    function showErrorModal(message) {
+                        document.getElementById('errorMessage').innerText = message;
+                        $('#errorModal').modal('show');
+                    }
+                    showErrorModal("@TempData["ErrorMessage"]");
+                </script>
+            }
+            
+            <span class="text-success">
+                @ViewBag.Message
+            </span>
+        </div>
+        <br /> 
+
+    </form>
+       
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#DownloadModal">
+        Descargar Archivos
+    </button>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        await Html.RenderPartialAsync("_ErrorModal");
+    }
+
+    <script src="~/js/Files.js"></script>
+}

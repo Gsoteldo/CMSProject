@@ -1,0 +1,245 @@
+﻿@model CMSProject.Models.CmsViewModel
+@{
+    ViewData["Title"] = "CreatorDashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Dashboard</h1>
+
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.tiny.cloud/1/x6omwmg280c6umicdb1iydhoxljwxesn20gc7qin1z9gvvfc/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="~/js/tinymce.js"></script>
+</head>
+
+
+
+
+
+@* <!-- Añadir Publicacion --> *@
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="saveForm" method="post">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Crear publicación</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label asp-for="Publication!.Title" class="control-label"></label>
+                        <input asp-for="Publication!.Title" class="form-control" />
+                        <span asp-validation-for="Publication!.Title" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Publication!.Concept" class="control-label"></label>
+                        <input id="descripcionArea" asp-for="Publication!.Concept" />
+                        <span asp-validation-for="Publication!.Concept" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Publication!.PublicationDate" class="control-label"></label>
+                        <input asp-for="Publication!.PublicationDate" class="form-control" />
+                        <span asp-validation-for="Publication!.PublicationDate" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btnCancel" data-dismiss="modal">Cerrar</button>
+                    <button id="btnSave" type="button" class="btn btn-primary">Crear Tarea</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@* <!-- Editar Publicacion --> *@
+<div class="modal fade" id="EditPublication" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="EditForm" asp-action="EditPublication" method="post">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Editar Tarea</h5>
+                    <button type="button" class="close btnCancel" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <input class="updateId" type="hidden" asp-for="Publication!.Id" />
+
+                    <div class="form-group">
+                        <label asp-for="Publication!.Title" class="control-label"></label>
+                        <input id="publicationTitle" asp-for="Publication!.Title" class="form-control" />
+                        <span asp-validation-for="Publication!.Title" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Publication!.Concept" class="control-label"></label>
+                        <input id="publicationConcept" asp-for="Publication!.Concept" class="form-control" />
+                        <span asp-validation-for="Publication!.Concept" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Publication!.PublicationDate" class="control-label"></label>
+                        <input id="publicationDate" asp-for="Publication!.PublicationDate" class="form-control" />
+                        <span asp-validation-for="Publication!.PublicationDate" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btnCancel" data-dismiss="modal">Cerrar</button>
+                    <button id="btnSave" type="submit" class="btn btn-primary">Guardar cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+@* <!-- Borrar Publicacion --> *@
+<div class="modal fade" id="DeletePublication" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="saveForm" method="post">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Borrar Tarea</h5>
+                    <button type="button" class="close btnCancel" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <h2>¿Estas seguro de que quieres borrar esta Publicación?</h2>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btnCancel" data-dismiss="modal">Cerrar</button>
+                    <button id="btnDelete" type="button" class="btn btn-danger">Borrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@* Filtro de Busqueda *@
+<form asp-controller="Creator" asp-action="CreatorDashboard">
+    <div class="row justify-content-center mt-3 mb-3">
+        <div class="col-11 text-center p-3 bg-secondary border border-dark rounded">
+            
+            <div class=" justify-content-center">
+                <div class="col-12 text-center">
+                    <input class="rounded" type="text" name="SearchString" placeholder="Palabra Clave" />
+                </div>
+            </div>
+
+            <div class="row mt-3 mb-3 justify-content-center ">
+                <div class="col-12 text-center">
+                    <input class="rounded" type="date" name="Date">
+                </div>
+            </div>
+
+            <input class="rounded" type="submit" value="Filtro" />
+        </div>
+    </div>
+</form>
+
+<div class="modal fade" id="CreatorDetailsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div id="CreatorDetailsModal1" class="modal-body">
+                <h4>PublicationTable</h4>
+                <hr />
+            </div>
+
+            <div class="modal-footer">
+                <a asp-action="CreatorDashboard">Back to List</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<input type="hidden" id="PublicationId"/>
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Publication!.Title)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Publication!.PublicationDate)
+            </th>
+
+            <th></th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Publications!)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.PublicationDate)
+                </td>
+
+                <div>
+                <td>
+                    <button type="button" class="btn btn-primary btn-read-more" onclick="ReadMore(@item.Id)" data-toggle="modal">
+                        Detalles
+                    </button>
+
+                    <a type="button" class="btn btn-primary" asp-action="EditPublication" asp-route-id="@item.Id">
+                        Editar
+                    </a>
+
+                    <button type="button" onclick="Confirm(@item.Id)" class="btn btn-danger" data-toggle="modal">
+                        Borrar
+                    </button>
+                </td>
+                </div>
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a type="button" class="btn btn-primary" asp-action="CreatePublication">
+    Crear nueva publicación
+</a>
+<br />
+<br />
+<br />
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/js/CreatorModals.js"></script>
+
+}

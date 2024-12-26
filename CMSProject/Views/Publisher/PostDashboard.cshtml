@@ -1,0 +1,60 @@
+﻿@model CMSProject.Models.CmsViewModel
+
+@{
+    ViewData["Title"] = "PostDashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Post Publicados</h1>
+
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+</head>
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Posting!.Publication.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Posting!.Publication!.Concept)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Posting!.Publication!.PublicationDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Posting!.Publication!.IdUser)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Posting!.File.Id)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Postings!)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Publication.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Publication.Concept)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Publication.PublicationDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Publication.IdUserNavigation!.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.File.FileName)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

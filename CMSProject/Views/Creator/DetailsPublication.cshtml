@@ -1,0 +1,37 @@
+﻿@model CMSProject.Models.PublicationTable
+
+@{
+    ViewData["Title"] = "DetailsPublication";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>DetailsPublication</h1>
+
+<div>
+    <h4>PublicationTable</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Concept)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Concept)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.PublicationDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.PublicationDate)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="EditPublication" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="CreatorDashboard">Back to List</a>
+</div>

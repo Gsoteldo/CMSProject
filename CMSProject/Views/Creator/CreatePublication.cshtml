@@ -1,0 +1,64 @@
+﻿@model CMSProject.Models.PublicationTable
+
+@{
+    ViewData["Title"] = "CreatePublication";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="https://cdn.tiny.cloud/1/x6omwmg280c6umicdb1iydhoxljwxesn20gc7qin1z9gvvfc/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="~/js/tinymce.js"></script>
+
+</head>
+
+@* <body>
+    <h1>TinyMCE Quick Start Guide</h1>
+    <form method="post">
+        <textarea id="mytextarea">Hello, World!</textarea>
+    </form>
+</body>
+</html> *@
+
+
+<h1>Crear Publicación</h1>
+
+<h4>PublicationTable</h4>
+<hr />
+<div class="row">
+    <div class="col-md">
+        <form asp-action="CreatePublication">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="PublicationDate" class="control-label"></label>
+                <input asp-for="PublicationDate" class="form-control" />
+                <span asp-validation-for="PublicationDate" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="Concept" class="control-label"></label>
+                <input id="descripcionArea" asp-for="Concept" />
+                <span asp-validation-for="Concept" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="CreatorDashboard">Back to List</a>
+</div>
+
