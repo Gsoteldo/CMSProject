@@ -10,14 +10,14 @@
     <Content Remove="wwwroot\%2a%2a" />
   </ItemGroup>
 
-  <ItemGroup>
+  <!--<ItemGroup>
     <Content Include="wwwroot\css\Card.css" />
     <Content Include="wwwroot\js\AdminModal.js" />
     <Content Include="wwwroot\js\Client.js" />
     <Content Include="wwwroot\js\publisher.js" />
     <Content Include="wwwroot\js\TinyMCE.js" />
     <Content Include="wwwroot\js\UsersModal.js" />
-  </ItemGroup>
+  </ItemGroup>-->
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.4" />
