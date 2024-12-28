@@ -15,7 +15,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CMSProject.Controllers
 {
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class AdminController(IWebHostEnvironment environment, CmsbbddContext context) : Controller
     {
 
